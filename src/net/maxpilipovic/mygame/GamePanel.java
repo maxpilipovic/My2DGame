@@ -27,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     //Starts the gameThread thread and creates a new object passing 'this', which is this class (gameThread)
+    //EP1
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
