@@ -24,6 +24,6 @@ public class Main {
         //Set Visable
         window.setVisible(true);
 
-
+        gamePanel.startGameThread();
     }
 }
