@@ -1,5 +1,8 @@
 package net.maxpilipovic.mygame;
 
+import net.maxpilipovic.entity.Player;
+import net.maxpilipovic.tile.TileManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,24 +11,29 @@ public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16; //16x16 tile
     final int scale = 3;
 
-    final int tileSize = originalTileSize * scale; //48x48 tile
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
-    final int screenWidth = tileSize * maxScreenCol; //48 * 16 = 768 pixels
-    final int screenLength = tileSize * maxScreenRow;//48 x 12 = 576 pixels
+    public final int tileSize = originalTileSize * scale; //48x48 tile
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
+    public final int screenWidth = tileSize * maxScreenCol; //48 * 16 = 768 pixels
+    public final int screenLength = tileSize * maxScreenRow;//48 x 12 = 576 pixels
 
+    //WORLD SETTINGS
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldLength = tileSize * maxWorldRow;
     //FPS
     int FPS = 60;
 
+    //Creating a tile
+    TileManager tileM = new TileManager(this);
     //Creating KeyHandler
     keyHandler keyH = new keyHandler();
     //Crating a Thread (Game Clock)
     Thread gameThread;
+    //Creating Player
+    public Player player = new Player(this, keyH);
 
-    //Set player's default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenLength));
@@ -45,60 +53,39 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void run() {
         double drawInterval = 100000000 / FPS; //1mil is 1 second in nanoseconds
-        double nextDrawTime = System.nanoTime() + drawInterval;
-        long lasTime = System.nanoTime();
+        double delta = 0;
+        long lastTime = System.nanoTime();
         long currentTime;
+
         long timer = 0;
         int drawCount = 0;
 
         //While the gameThread exists...
         while (gameThread != null) {
             currentTime = System.nanoTime();
-            //1. UPDATE information such as character position
-            update();
-            //2. DRAW the screen with the updated information
-            repaint();
+            delta += (currentTime - lastTime) / drawInterval;
+            timer += (currentTime - lastTime);
+            lastTime = currentTime;
 
-            //SLEEP - GAME LOOP METHOD
-            try {
-                double remainingTime = nextDrawTime - System.nanoTime();
-                remainingTime = remainingTime / 100000; //Converts to milliseconds
+            if (delta >= 1) {
+                //1. UPDATE information such as character position
+                update();
+                //2. DRAW the screen with the updated information
+                repaint();
+                delta--;
+                drawCount++;
+            }
 
-                if (remainingTime < 0) {
-                    remainingTime = 0;
-                    drawCount++;
-                }
-                Thread.sleep((long) remainingTime);
-                long lastTime = currentTime;
-                timer += (currentTime - lastTime);
-
-                if (timer >= 1000000000) {
-                    System.out.println("FPS:" + drawCount);
-                    drawCount = 0;
-                    timer = 0;
-                }
-                nextDrawTime += drawInterval;
-
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            if (timer >= 100000000) {
+                System.out.println("FPS: " + drawCount);
+                drawCount = 0;
+                timer = 0;
             }
         }
     }
 
     public void update() {
-        if (keyH.upPressed == true) {
-            playerY -= playerSpeed;
-        }
-        else if (keyH.downPressed == true) {
-            playerY += playerSpeed;
-        }
-        else if (keyH.leftPressed == true) {
-            playerX -= playerSpeed;
-        }
-        else if (keyH.rightPressed == true) {
-            playerX += playerSpeed;
-        }
-
+        player.update();
     }
 
     public void paintComponent(Graphics g) {
@@ -108,8 +95,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         //Graphics2D extends the Graphics class to provide more sophisticated control
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.white);
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
+
+        //Draw tiles before player, or you cant see player.
+        tileM.draw(g2);
+        player.draw(g2);
 
         //Saves memory. Releases unused resources.
         g2.dispose();
