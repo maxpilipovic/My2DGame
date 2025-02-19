@@ -1,6 +1,7 @@
 package net.maxpilipovic.mygame;
 
 import net.maxpilipovic.entity.Player;
+import net.maxpilipovic.object.SuperObject;
 import net.maxpilipovic.tile.TileManager;
 
 import javax.swing.*;
@@ -34,8 +35,11 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     //Creating Collision Detection
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this);
     //Creating Player
     public Player player = new Player(this, keyH);
+    //Create Objects (Size of 10 during the game)
+    public SuperObject obj[] = new SuperObject[10];
 
 
     public GamePanel() {
@@ -46,6 +50,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true); //GamePanel can be focused to "accept" receive key input.
     }
 
+    public void setupGame() {
+        aSetter.setObject();
+    }
     //Starts the gameThread thread and creates a new object passing 'this', which is this class (gameThread)
     //EP1
     public void startGameThread() {
@@ -99,8 +106,17 @@ public class GamePanel extends JPanel implements Runnable {
         //Graphics2D extends the Graphics class to provide more sophisticated control
         Graphics2D g2 = (Graphics2D) g;
 
+
         //Draw tiles before player, or you cant see player.
         tileM.draw(g2);
+
+        //Draw Object
+        for (int i = 0; i < obj.length; i++) {
+            if (obj[i] != null) {
+                obj[i].draw(g2, this);
+            }
+        }
+        //Draw Player
         player.draw(g2);
 
         //Saves memory. Releases unused resources.
