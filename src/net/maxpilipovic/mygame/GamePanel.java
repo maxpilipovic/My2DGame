@@ -31,10 +31,13 @@ public class GamePanel extends JPanel implements Runnable {
     //Creating KeyHandler
     keyHandler keyH = new keyHandler();
     //Create Sound
-    Sound sound = new Sound();
+    Sound music = new Sound();
+    Sound se = new Sound();
     //Creating Collision Detection
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
+    //Creating UI
+    public UI ui = new UI(this);
     //Crating a Thread (Game Clock)
     Thread gameThread;
     //Creating Player
@@ -121,24 +124,27 @@ public class GamePanel extends JPanel implements Runnable {
         //Draw Player
         player.draw(g2);
 
+        //Draw UI
+        ui.draw(g2);
+
         //Saves memory. Releases unused resources.
         g2.dispose();
     }
 
     public void playMusic(int i) {
         //Sound effects to loop, e.g game music.
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
     }
 
-    public void stopMusic(int i) {
-        sound.stop();
+    public void stopMusic() {
+        music.stop();
     }
 
     public void playSE(int i) {
         //Play sound effect method for powerups they dont need to loop
-        sound.setFile(i);
-        sound.play();
+        se.setFile(i);
+        se.play();
     }
 }
