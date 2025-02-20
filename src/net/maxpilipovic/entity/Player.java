@@ -15,6 +15,8 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
+    public int standCounter = 0;
+
     public int hasKey = 0;
 
 
@@ -85,14 +87,23 @@ public class Player extends Entity {
                         break;
                 }
             }
+
+            //This changes sprite form
             spriteCounter++;
-            if (spriteCounter > 60) {
+            if (spriteCounter > 12) {
                 if (spriteNum == 1) {
                     spriteNum = 2;
                 } else if (spriteNum == 2) {
                     spriteNum = 1;
                 }
                 spriteCounter = 0;
+            }
+        } else {
+            standCounter ++;
+
+            if (standCounter == 20) {
+                standCounter = 0;
+                spriteNum = 1;
             }
         }
     }
@@ -118,7 +129,7 @@ public class Player extends Entity {
                         //System.out.println("Key: " + hasKey);
                         gp.ui.showMessage("You opened the door!");
                     } else{
-                        System.out.println("You need a key!");
+                        gp.ui.showMessage("You need a key to open the door!");
                     }
                     break;
                 case "Boots":

@@ -78,7 +78,7 @@ public class UI {
             text = "Congratulations";
             textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
             x = gp.screenWidth / 2 - textLength / 2;
-            y = gp.screenLength / 2 - (gp.tileSize * 2);
+            y = gp.screenLength / 2 + (gp.tileSize * 2);
 
 
             //Display text
