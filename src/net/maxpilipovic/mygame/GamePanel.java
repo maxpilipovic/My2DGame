@@ -21,8 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
     //WORLD SETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    public final int worldWidth = tileSize * maxWorldCol;
-    public final int worldLength = tileSize * maxWorldRow;
+
     //FPS
     int FPS = 60;
 
@@ -31,11 +30,13 @@ public class GamePanel extends JPanel implements Runnable {
     TileManager tileM = new TileManager(this);
     //Creating KeyHandler
     keyHandler keyH = new keyHandler();
-    //Crating a Thread (Game Clock)
-    Thread gameThread;
+    //Create Sound
+    Sound sound = new Sound();
     //Creating Collision Detection
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
+    //Crating a Thread (Game Clock)
+    Thread gameThread;
     //Creating Player
     public Player player = new Player(this, keyH);
     //Create Objects (Size of 10 during the game)
@@ -52,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         aSetter.setObject();
+        playMusic(0);
     }
     //Starts the gameThread thread and creates a new object passing 'this', which is this class (gameThread)
     //EP1
@@ -62,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = 100000000 / FPS; //1mil is 1 second in nanoseconds
+        double drawInterval = 100000000.0 / FPS; //1mil is 1 second in nanoseconds
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -121,5 +123,22 @@ public class GamePanel extends JPanel implements Runnable {
 
         //Saves memory. Releases unused resources.
         g2.dispose();
+    }
+
+    public void playMusic(int i) {
+        //Sound effects to loop, e.g game music.
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic(int i) {
+        sound.stop();
+    }
+
+    public void playSE(int i) {
+        //Play sound effect method for powerups they dont need to loop
+        sound.setFile(i);
+        sound.play();
     }
 }

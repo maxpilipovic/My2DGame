@@ -1,5 +1,6 @@
 package net.maxpilipovic.mygame;
 
+import net.maxpilipovic.object.OBJ_Boots;
 import net.maxpilipovic.object.OBJ_Chest;
 import net.maxpilipovic.object.OBJ_Door;
 import net.maxpilipovic.object.OBJ_Key;
@@ -40,5 +41,9 @@ public class AssetSetter {
         gp.obj[6] = new OBJ_Chest();
         gp.obj[6].worldX = 9 * gp.tileSize;
         gp.obj[6].worldY = 25 * gp.tileSize;
+
+        gp.obj[7] = new OBJ_Boots();
+        gp.obj[7].worldX = 5 * gp.tileSize;
+        gp.obj[7].worldY = 48 * gp.tileSize;
     }
 }
