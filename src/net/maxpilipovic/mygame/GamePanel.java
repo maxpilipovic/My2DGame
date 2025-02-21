@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
     //Creating a tile
     TileManager tileM = new TileManager(this);
     //Creating KeyHandler
-    keyHandler keyH = new keyHandler();
+    keyHandler keyH = new keyHandler(this);
     //Create Sound
     Sound music = new Sound();
     Sound se = new Sound();
@@ -45,6 +45,12 @@ public class GamePanel extends JPanel implements Runnable {
     //Create Objects (Size of 10 during the game)
     public SuperObject obj[] = new SuperObject[10];
 
+    //GAME STATE
+    public int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
+
+
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenLength));
@@ -57,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         aSetter.setObject();
         playMusic(0);
+        gameState = playState;
     }
     //Starts the gameThread thread and creates a new object passing 'this', which is this class (gameThread)
     //EP1
@@ -99,7 +106,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
+        if (gameState == playState) {
+            player.update();
+        }
+
+        if (gameState == pauseState) {
+            //Nothing for now
+        }
+
     }
 
     public void paintComponent(Graphics g) {
