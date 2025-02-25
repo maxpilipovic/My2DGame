@@ -1,5 +1,6 @@
 package net.maxpilipovic.mygame;
 
+import net.maxpilipovic.entity.NPC_OldMan;
 import net.maxpilipovic.object.OBJ_Boots;
 import net.maxpilipovic.object.OBJ_Chest;
 import net.maxpilipovic.object.OBJ_Door;
@@ -15,5 +16,11 @@ public class AssetSetter {
 
     public void setObject() {
 
+    }
+
+    public void setNPC() {
+        gp.npc[0] = new NPC_OldMan(gp);
+        gp.npc[0].worldX = gp.tileSize * 21;
+        gp.npc[0].worldY = gp.tileSize * 21;
     }
 }
