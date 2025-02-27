@@ -46,9 +46,13 @@ public class Player extends Entity {
     public void setDefaultValues() {
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
+
         speed = 4;
         direction = "down";
 
+        //Player Status
+        maxLife = 6;
+        life = maxLife;
     }
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
@@ -74,6 +78,10 @@ public class Player extends Entity {
             //CHECK NPC COLLISION
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
+
+            //CHECK EVENT
+            gp.eHandler.checkEvent();
+            gp.keyH.enterPressed = false;
 
 
             //IF COLLISION IS FALSE, PLAYER CAN MOVE
@@ -129,7 +137,8 @@ public class Player extends Entity {
                 gp.npc[i].speak();
             }
         }
-        gp.keyH.enterPressed = false;
+        //Removed due to water drinking bug
+        //gp.keyH.enterPressed = false;
     }
 
     public void getPlayerImage() {

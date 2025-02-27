@@ -26,7 +26,9 @@ public class GamePanel extends JPanel implements Runnable {
     //FPS
     int FPS = 60;
 
-    //Instantiating
+    //---Instantiating---
+
+    //SYSTEM
     //Creating a tile
     TileManager tileM = new TileManager(this);
     //Creating KeyHandler
@@ -39,8 +41,11 @@ public class GamePanel extends JPanel implements Runnable {
     public AssetSetter aSetter = new AssetSetter(this);
     //Creating UI
     public UI ui = new UI(this);
+    public EventHandler eHandler = new EventHandler(this);
     //Crating a Thread (Game Clock)
     Thread gameThread;
+
+    //ENTITY AND OBJECT
     //Creating Player
     public Player player = new Player(this, keyH);
     //Create Objects (Size of 10 during the game)
@@ -49,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     //GAME STATE
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
@@ -66,8 +72,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         aSetter.setObject();
         aSetter.setNPC();
-        playMusic(0);
-        gameState = playState;
+        //playMusic(0);
+        gameState = titleState;
     }
     //Starts the gameThread thread and creates a new object passing 'this', which is this class (gameThread)
     //EP1
@@ -139,28 +145,34 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyH.checkDrawTime == true) {
             drawStart = System.nanoTime();
         }
+        //TITLE SCREEN
+        if (gameState == titleState) {
+            ui.draw(g2);
 
-        //Draw tiles before player, or you cant see player.
-        tileM.draw(g2);
+        } else {
+            //OTHERS
+            //Draw tiles before player, or you cant see player.
+            tileM.draw(g2);
 
-        //Draw Object
-        for (int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                obj[i].draw(g2, this);
+            //Draw Object
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    obj[i].draw(g2, this);
+                }
             }
-        }
 
-        //NPC
-        for (int i = 0; i < npc.length; i++) {
-            if (npc[i] != null) {
-                npc[i].draw(g2);
+            //NPC
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].draw(g2);
+                }
             }
-        }
-        //Draw Player
-        player.draw(g2);
+            //Draw Player
+            player.draw(g2);
 
-        //Draw UI
-        ui.draw(g2);
+            //Draw UI
+            ui.draw(g2);
+        }
 
         //DEBUG
         if (keyH.checkDrawTime == true) {
