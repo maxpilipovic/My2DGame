@@ -1,15 +1,13 @@
 package net.maxpilipovic.mygame;
 
+import net.maxpilipovic.entity.Entity;
 import net.maxpilipovic.object.OBJ_Heart;
-import net.maxpilipovic.object.OBJ_Key;
-import net.maxpilipovic.object.SuperObject;
 
 import java.awt.Font;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
 
 public class UI {
 
@@ -49,7 +47,7 @@ public class UI {
         }
 
         //CREATE HUD OBJECT
-        SuperObject heart = new OBJ_Heart(gp);
+        Entity heart = new OBJ_Heart(gp);
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_blank = heart.image3;

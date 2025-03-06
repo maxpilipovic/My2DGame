@@ -1,22 +1,19 @@
 package net.maxpilipovic.object;
 
+import net.maxpilipovic.entity.Entity;
 import net.maxpilipovic.mygame.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class OBJ_Key extends SuperObject{
-    GamePanel gp;
+public class OBJ_Key extends Entity {
 
     public OBJ_Key(GamePanel gp) {
+        super(gp);
 
-        this.gp = gp;
         name = "Key";
-        try {
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/key.png"));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        down1 = setup("/objects/key");
+
+
     }
 }

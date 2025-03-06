@@ -1,24 +1,19 @@
 package net.maxpilipovic.object;
 
+import net.maxpilipovic.entity.Entity;
 import net.maxpilipovic.mygame.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class OBJ_Door extends SuperObject {
-    GamePanel gp;
+public class OBJ_Door extends Entity {
 
     public OBJ_Door(GamePanel gp) {
 
-        this.gp = gp;
-        name = "Door";
-        try {
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/door.png"));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super(gp);
 
+        name = "Door";
+        down1 = setup("/objects/door");
         collision = true;
     }
 }
