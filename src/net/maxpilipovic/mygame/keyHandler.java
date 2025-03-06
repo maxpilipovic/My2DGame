@@ -47,7 +47,7 @@ public class keyHandler implements KeyListener {
                 }
 
                 if (gp.ui.commandNum == 1) {
-                    //ADD LATEr
+                    //ADD LATER
                 }
                 if (gp.ui.commandNum == 2) {
                     System.exit(0);
@@ -57,7 +57,7 @@ public class keyHandler implements KeyListener {
         }
 
         //PLAY STATE
-        if (gp.gameState == gp.playState) {
+        else if (gp.gameState == gp.playState) {
             if (code == KeyEvent.VK_W) {
                 upPressed = true;
 

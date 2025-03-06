@@ -79,8 +79,9 @@ public class UI {
         //Pause State
         if (gp.gameState == gp.pauseState) {
 
-            drawPlayerLife();
+            //System.out.println("Pause state activated");
             drawPauseScreen();
+            drawPlayerLife();
 
         }
 
@@ -124,7 +125,7 @@ public class UI {
     }
 
     public void drawPauseScreen() {
-        g2.getFont().deriveFont(Font.BOLD, 80F);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
         String text = "PAUSED";
         int x = getXforCenterText(text);
         int y = gp.screenLength / 2;
