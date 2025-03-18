@@ -98,6 +98,7 @@ public class EventHandler {
     }
     public void damagePit(int col, int row,int gameState) {
         gp.gameState = gameState;
+        gp.playSE(6);
         gp.ui.currentDialogue = "You fall into a pit";
         gp.player.life -= 1;
 
@@ -109,6 +110,8 @@ public class EventHandler {
 
         if (gp.keyH.enterPressed == true) {
             gp.gameState = gameState;
+            gp.player.attackCancelled = true;
+            gp.playSE(2);
             gp.ui.currentDialogue = "You drink the water. /nYour life has been recovered.";
             gp.player.life = gp.player.maxLife;
         }
@@ -117,6 +120,7 @@ public class EventHandler {
     public void teleport(int gameState) {
 
         gp.gameState = gameState;
+        gp.playSE(2);
         gp.ui.currentDialogue = "Teleport!";
         gp.player.worldX = gp.tileSize * 37;
         gp.player.worldY = gp.tileSize * 10;

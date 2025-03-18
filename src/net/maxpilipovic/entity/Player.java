@@ -3,6 +3,8 @@ package net.maxpilipovic.entity;
 import net.maxpilipovic.mygame.GamePanel;
 import net.maxpilipovic.mygame.UtilityTool;
 import net.maxpilipovic.mygame.keyHandler;
+import net.maxpilipovic.object.OBJ_Shield_Wood;
+import net.maxpilipovic.object.OBJ_Sword_Normal;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,6 +18,8 @@ public class Player extends Entity {
     public final int screenY;
 
     public int standCounter = 0;
+
+    public boolean attackCancelled = false;
 
     //public int hasKey = 0; Don't use anymore
 
@@ -59,8 +63,26 @@ public class Player extends Entity {
         direction = "down";
 
         //Player Status
+        level = 1;
         maxLife = 6;
         life = maxLife;
+        strength = 1; //More strength, more damage he gives
+        dexterity = 1; //More dexerity he has, less damage he receives
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getAttack(); //Total attack value is decided by strength and weapon
+        defense = getDefense(); //Total defense value is decided by dexterity and shield
+    }
+
+    public int getAttack() {
+        return attack = strength * currentWeapon.attackValue;
+    }
+
+    public int getDefense() {
+        return defense = dexterity * currentShield.defenseValue;
     }
     public void update() {
 
@@ -116,6 +138,13 @@ public class Player extends Entity {
                 }
             }
 
+            if (keyH.enterPressed == true && attackCancelled == false) {
+                gp.playSE(7);
+                attacking = true;
+                spriteCounter = 0;
+            }
+
+            attackCancelled = false;
             gp.keyH.enterPressed = false;
 
             //This changes sprite form
@@ -210,10 +239,9 @@ public class Player extends Entity {
 
         if (gp.keyH.enterPressed == true) {
             if (i != 999) {
+                attackCancelled = true;
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
-            } else {
-                attacking = true;
             }
             //Removed due to water drinking bug
             //gp.keyH.enterPressed = false;
@@ -224,6 +252,7 @@ public class Player extends Entity {
         if (i != 999) {
 
             if (invicable == false) {
+                gp.playSE(6);
                 life -= 1;
                 invicable = true;
             }
@@ -234,11 +263,13 @@ public class Player extends Entity {
         if (i != 999) {
 
             if (gp.monster[i].invicable == false) {
+                gp.playSE(5);
                 gp.monster[i].life -= 1;
                 gp.monster[i].invicable = true;
+                gp.monster[i].damageReaction();
 
                 if (gp.monster[i].life <= 0) {
-                    gp.monster[i] = null;
+                    gp.monster[i].dying = true;
                 }
             }
         }
@@ -276,7 +307,7 @@ public class Player extends Entity {
         int tempScreenX = screenX;
         int tempScreenY = screenY;
 
-        switch(direction) {
+        switch (direction) {
             case "up":
                 if (attacking == false) {
                     if (spriteNum == 1) {
@@ -356,7 +387,7 @@ public class Player extends Entity {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
 
-        g2.drawImage(image, tempScreenX, tempScreenY,null);
+        g2.drawImage(image, tempScreenX, tempScreenY, null);
 
         //RESET ALPHA (OPACITY)
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
