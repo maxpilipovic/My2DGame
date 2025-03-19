@@ -9,7 +9,7 @@ public class keyHandler implements KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
 
     //DEBUG
-    boolean checkDrawTime;
+    boolean showDebug;
 
     public keyHandler(GamePanel gp) {
         this.gp = gp;
@@ -107,12 +107,16 @@ public class keyHandler implements KeyListener {
 
         //DEBUG
         if(code == KeyEvent.VK_T) {
-            if (checkDrawTime == false) {
-                checkDrawTime = true;
+            if (showDebug == false) {
+                showDebug = true;
             }
-            else if (checkDrawTime == true) {
-                checkDrawTime = false;
+            else if (showDebug == true) {
+                showDebug = false;
             }
+        }
+        if(code == KeyEvent.VK_R) {
+            gp.tileM.loadMap("/maps/map03.txt");
+            System.out.println("Refreshed map");
         }
     }
     public void pauseState(int code) {
