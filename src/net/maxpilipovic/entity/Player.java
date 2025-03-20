@@ -3,6 +3,7 @@ package net.maxpilipovic.entity;
 import net.maxpilipovic.mygame.GamePanel;
 import net.maxpilipovic.mygame.UtilityTool;
 import net.maxpilipovic.mygame.keyHandler;
+import net.maxpilipovic.object.OBJ_Key;
 import net.maxpilipovic.object.OBJ_Shield_Wood;
 import net.maxpilipovic.object.OBJ_Sword_Normal;
 
@@ -10,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Player extends Entity {
     keyHandler keyH;
@@ -21,6 +23,8 @@ public class Player extends Entity {
 
     public boolean attackCancelled = false;
 
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
     //public int hasKey = 0; Don't use anymore
 
 
@@ -49,6 +53,7 @@ public class Player extends Entity {
         setDefaultValues();
         getPlayerImage();
         getPlayerAttackImage();
+        setItems();
     }
 
     public void setDefaultValues() {
@@ -75,6 +80,12 @@ public class Player extends Entity {
         currentShield = new OBJ_Shield_Wood(gp);
         attack = getAttack(); //Total attack value is decided by strength and weapon
         defense = getDefense(); //Total defense value is decided by dexterity and shield
+    }
+
+    public void setItems() {
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new OBJ_Key(gp));
     }
 
     public int getAttack() {
