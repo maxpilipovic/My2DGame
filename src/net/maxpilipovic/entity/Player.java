@@ -3,6 +3,7 @@ package net.maxpilipovic.entity;
 import net.maxpilipovic.mygame.GamePanel;
 import net.maxpilipovic.mygame.UtilityTool;
 import net.maxpilipovic.mygame.keyHandler;
+import net.maxpilipovic.object.OBJ_Fireball;
 import net.maxpilipovic.object.OBJ_Key;
 import net.maxpilipovic.object.OBJ_Shield_Wood;
 import net.maxpilipovic.object.OBJ_Sword_Normal;
@@ -78,6 +79,7 @@ public class Player extends Entity {
         coin = 0;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
+        projectile = new OBJ_Fireball(gp);
         attack = getAttack(); //Total attack value is decided by strength and weapon
         defense = getDefense(); //Total defense value is decided by dexterity and shield
     }
@@ -178,6 +180,20 @@ public class Player extends Entity {
             }
         }
 
+        //Second condition checks if projectile is still alive (Believe in air). NOT DEAD
+        if (gp.keyH.shotKeyPressed == true && projectile.alive == false && shotAvailableCounter == 30) {
+
+            //SET DEFAULT COORDINATES, DIRECTION AND USER
+            projectile.set(worldX, worldY, direction, true, this);
+
+            //ADD IT TO LIST
+            gp.projectileList.add(projectile);
+
+            shotAvailableCounter = 0;
+
+            //PLAY SOUND EFFECT
+            gp.playSE(10);
+        }
         //TIMER for Invisible
         if (invicable == true) {
             invincibleCounter++;
@@ -185,6 +201,10 @@ public class Player extends Entity {
                 invicable = false;
                 invincibleCounter = 0;
             }
+        }
+
+        if (shotAvailableCounter < 30) {
+            shotAvailableCounter++;
         }
     }
 
@@ -242,7 +262,7 @@ public class Player extends Entity {
 
             //Check monster collision with the updated worldX, worldY and solidArea
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-            damageMonster(monsterIndex);
+            damageMonster(monsterIndex, attack);
 
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -272,8 +292,8 @@ public class Player extends Entity {
 
     public void contactMonster(int i) {
         if (i != 999) {
-
-            if (invicable == false) {
+            //Added second condition (if monster dying you dont receive any damage
+            if (invicable == false && gp.monster[i].dying == false) {
                 gp.playSE(6);
 
                 int damage = gp.monster[i].attack - defense;
@@ -288,7 +308,7 @@ public class Player extends Entity {
         }
     }
 
-    public void damageMonster(int i) {
+    public void damageMonster(int i, int attack) {
         if (i != 999) {
 
             if (gp.monster[i].invicable == false) {
