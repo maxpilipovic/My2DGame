@@ -2,10 +2,7 @@ package net.maxpilipovic.mygame;
 
 import net.maxpilipovic.entity.NPC_OldMan;
 import net.maxpilipovic.monster.MON_GreenSlime;
-import net.maxpilipovic.object.OBJ_Boots;
-import net.maxpilipovic.object.OBJ_Chest;
-import net.maxpilipovic.object.OBJ_Door;
-import net.maxpilipovic.object.OBJ_Key;
+import net.maxpilipovic.object.*;
 
 public class AssetSetter {
 
@@ -17,6 +14,38 @@ public class AssetSetter {
 
     public void setObject() {
         //Create objects
+        int i = 0;
+        gp.obj[i] = new OBJ_Key(gp);
+        gp.obj[i].worldX = gp.tileSize * 25;
+        gp.obj[i].worldY = gp.tileSize * 23;
+        i++;
+
+        gp.obj[i] = new OBJ_Key(gp);
+        gp.obj[i].worldX = gp.tileSize * 21;
+        gp.obj[i].worldY = gp.tileSize * 19;
+        i++;
+
+        gp.obj[i] = new OBJ_Key(gp);
+        gp.obj[i].worldX = gp.tileSize * 26;
+        gp.obj[i].worldY = gp.tileSize * 21;
+        i++;
+
+        gp.obj[i] = new OBJ_Axe(gp);
+        gp.obj[i].worldX = gp.tileSize * 33;
+        gp.obj[i].worldY = gp.tileSize * 21;
+        i++;
+
+        gp.obj[i] = new OBJ_Shield_Blue(gp);
+        gp.obj[i].worldX = gp.tileSize * 35;
+        gp.obj[i].worldY = gp.tileSize * 21;
+        i++;
+
+        gp.obj[i] = new OBJ_Potion_Red(gp);
+        gp.obj[i].worldX = gp.tileSize * 22;
+        gp.obj[i].worldY = gp.tileSize * 27;
+
+
+
 
     }
 
