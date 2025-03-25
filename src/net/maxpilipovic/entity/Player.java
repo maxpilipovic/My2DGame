@@ -3,10 +3,7 @@ package net.maxpilipovic.entity;
 import net.maxpilipovic.mygame.GamePanel;
 import net.maxpilipovic.mygame.UtilityTool;
 import net.maxpilipovic.mygame.keyHandler;
-import net.maxpilipovic.object.OBJ_Fireball;
-import net.maxpilipovic.object.OBJ_Key;
-import net.maxpilipovic.object.OBJ_Shield_Wood;
-import net.maxpilipovic.object.OBJ_Sword_Normal;
+import net.maxpilipovic.object.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -72,6 +69,9 @@ public class Player extends Entity {
         level = 1;
         maxLife = 6;
         life = maxLife;
+        maxMana = 4;
+        mana = maxMana;
+        ammo = 10;
         strength = 1; //More strength, more damage he gives
         dexterity = 1; //More dexerity he has, less damage he receives
         exp = 0;
@@ -80,6 +80,7 @@ public class Player extends Entity {
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
         projectile = new OBJ_Fireball(gp);
+        //projectile = new OBJ_Rock(gp);
         attack = getAttack(); //Total attack value is decided by strength and weapon
         defense = getDefense(); //Total defense value is decided by dexterity and shield
     }
@@ -181,10 +182,13 @@ public class Player extends Entity {
         }
 
         //Second condition checks if projectile is still alive (Believe in air). NOT DEAD
-        if (gp.keyH.shotKeyPressed == true && projectile.alive == false && shotAvailableCounter == 30) {
+        if (gp.keyH.shotKeyPressed == true && projectile.alive == false && shotAvailableCounter == 30 && projectile.haveResource(this) == true) {
 
             //SET DEFAULT COORDINATES, DIRECTION AND USER
             projectile.set(worldX, worldY, direction, true, this);
+
+            //SUBTRACT COST
+            projectile.subtractResource(this);
 
             //ADD IT TO LIST
             gp.projectileList.add(projectile);

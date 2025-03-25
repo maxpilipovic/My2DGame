@@ -1,5 +1,6 @@
 package net.maxpilipovic.object;
 
+import net.maxpilipovic.entity.Entity;
 import net.maxpilipovic.entity.Projectile;
 import net.maxpilipovic.mygame.GamePanel;
 
@@ -13,7 +14,7 @@ public class OBJ_Fireball extends Projectile {
         this.gp = gp;
 
         name = "Fireball";
-        speed = 10;
+        speed = 5;
         maxLife = 80;
         life = maxLife;
         attack = 2;
@@ -33,8 +34,20 @@ public class OBJ_Fireball extends Projectile {
         right2 = setup("/projectile/fireball_right_2", gp.tileSize, gp.tileSize);
     }
 
+    //Check here and not projectile because required resource could be different for other projectiles (In the future)
+    @Override
+    public boolean haveResource(Entity user) {
+        boolean haveResource = false;
+        if (user.mana >= useCost) {
+            haveResource = true;
+        }
+        return haveResource;
 
+    }
 
-
+    @Override
+    public void subtractResource(Entity user) {
+        user.mana -= useCost;
+    }
 
 }
