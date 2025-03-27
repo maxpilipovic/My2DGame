@@ -2,6 +2,9 @@ package net.maxpilipovic.monster;
 
 import net.maxpilipovic.entity.Entity;
 import net.maxpilipovic.mygame.GamePanel;
+import net.maxpilipovic.object.OBJ_Coin_Bronze;
+import net.maxpilipovic.object.OBJ_Heart;
+import net.maxpilipovic.object.OBJ_ManaCrystal;
 import net.maxpilipovic.object.OBJ_Rock;
 
 import java.util.Random;
@@ -85,5 +88,28 @@ public class MON_GreenSlime extends Entity {
     public void damageReaction() {
         actionLockCounter = 0;
         direction = gp.player.direction;
+    }
+
+    public void checkDrop() {
+
+        //CAST A DIE
+        int i = new Random().nextInt(100) + 1;
+
+        //Set the monster drop
+        if (i < 50) {
+            dropItem(new OBJ_Coin_Bronze(gp));
+
+        }
+
+        if (i >= 50 && i < 75) {
+            dropItem(new OBJ_Heart(gp));
+
+        }
+
+        if (i >= 75 && i < 100) {
+            dropItem(new OBJ_ManaCrystal(gp));
+
+        }
+
     }
 }
