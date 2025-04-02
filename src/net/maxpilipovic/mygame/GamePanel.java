@@ -7,6 +7,7 @@ import net.maxpilipovic.tile_interactive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,14 +18,21 @@ public class GamePanel extends JPanel implements Runnable {
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale; //48x48 tile
-    public final int maxScreenCol = 16;
+    public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
-    public final int screenWidth = tileSize * maxScreenCol; //48 * 16 = 768 pixels
+    public final int screenWidth = tileSize * maxScreenCol; //48 * 20 = 960 pixels
     public final int screenLength = tileSize * maxScreenRow;//48 x 12 = 576 pixels
 
     //WORLD SETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
+
+    //FULL SCREEN
+    int screenWidth2 = screenWidth;
+    int screenHeight2 = screenLength;
+    BufferedImage tempScreen;
+    Graphics2D g2;
+
 
     //FPS
     int FPS = 60;
@@ -86,7 +94,23 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setInteractiveTile();
         //playMusic(0);
         gameState = titleState;
+
+        tempScreen = new BufferedImage(screenWidth, screenLength, BufferedImage.TYPE_INT_ARGB_PRE);
+        g2 = (Graphics2D)tempScreen.getGraphics();
+        //etFullScreen(); //Uncomment for full screen
     }
+
+    public void setFullScreen() {
+        //GET LOCAL SCREEN DEVICE
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+
+        //GET FULL SCREEN WIDTH AND HEIGHT
+        screenWidth2 = Main.window.getWidth();
+        screenHeight2 = Main.window.getHeight();
+    }
+
     //Starts the gameThread thread and creates a new object passing 'this', which is this class (gameThread)
     //EP1
     public void startGameThread() {
@@ -114,7 +138,9 @@ public class GamePanel extends JPanel implements Runnable {
                 //1. UPDATE information such as character position
                 update();
                 //2. DRAW the screen with the updated information
-                repaint();
+                //repaint();
+                drawToTempScreen(); //Draw everything to bufferdImage
+                drawToScreen(); //Draw bufferedImage to screen
                 delta--;
                 drawCount++;
             }
@@ -186,12 +212,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-    public void paintComponent(Graphics g) {
-        //Parent class of this class. Meaning the constructor of JPanel (The parent)
-        super.paintComponent(g);
-        //Graphics2D extends the Graphics class to provide more sophisticated control
-        Graphics2D g2 = (Graphics2D) g;
-
+    public void drawToTempScreen() {
         //DEBUG
         long drawStart = 0;
         if (keyH.showDebug == true) {
@@ -241,7 +262,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             for (int i = 0; i < particleList.size(); i++) {
                 if (particleList.get(i) != null) {
-                        entityList.add(particleList.get(i));
+                    entityList.add(particleList.get(i));
                 }
             }
 
@@ -289,8 +310,12 @@ public class GamePanel extends JPanel implements Runnable {
             //System.out.println("Draw Time: " + passed);
         }
 
-        //Saves memory. Releases unused resources.
-        g2.dispose();
+    }
+
+    public void drawToScreen() {
+        Graphics g = getGraphics();
+        g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+        g.dispose();
     }
 
     public void playMusic(int i) {
